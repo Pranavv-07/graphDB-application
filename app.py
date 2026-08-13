@@ -166,7 +166,7 @@ st.markdown(
 st.markdown(
     """
     <div class="hero-container">
-        <div class="main-title">🔗 Skill<span>Graph</span></div>
+        <div class="main-title">Skill<span>Graph</span></div>
         <div class="subtitle">Explore connections between students, skills, projects, and careers.</div>
     </div>
     """,
@@ -305,7 +305,7 @@ with tab2:
                                 unsafe_allow_html=True
                             )
             except Exception as error:
-                st.error("Unable to query project information.", icon="🚨")
+                st.error("Unable to query project information.")
                 st.caption(f"Error details: {error}")
 
 
