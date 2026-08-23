@@ -4,18 +4,30 @@ from database import driver
 def find_students_by_skill(skill_name):
     """
     Find all students who have a particular skill.
+    Returns name, year, department plus proficiency and years_experience
+    from the HAS_SKILL relationship.
     """
 
     query = """
-    MATCH (student:Student)-[:HAS_SKILL]->(skill:Skill)
+    MATCH (student:Student)-[r:HAS_SKILL]->(skill:Skill)
     WHERE skill.name = $skill_name
 
     RETURN
-        student.name AS name,
-        student.year AS year,
-        student.department AS department
+        student.name        AS name,
+        student.year        AS year,
+        student.department  AS department,
+        r.proficiency       AS proficiency,
+        r.years_experience  AS years_experience
 
-    ORDER BY student.name
+    ORDER BY
+        CASE r.proficiency
+            WHEN 'Expert'       THEN 1
+            WHEN 'Advanced'     THEN 2
+            WHEN 'Intermediate' THEN 3
+            WHEN 'Beginner'     THEN 4
+            ELSE 5
+        END,
+        student.name
     """
 
     with driver.session() as session:
@@ -118,6 +130,7 @@ def rank_students_for_job(job_title):
     """
     Rank students according to how many skills
     they share with the selected job.
+    Only returns students with at least 1 matching skill.
     """
 
     query = """
@@ -147,12 +160,14 @@ def rank_students_for_job(job_title):
             WHERE skill IN student_skills
         ] AS matching_skills
 
+    WHERE size(matching_skills) > 0
+
     RETURN
-        student.name AS student,
-        student.year AS year,
+        student.name       AS student,
+        student.year       AS year,
         student.department AS department,
-        size(required_skills) AS total_required,
-        size(matching_skills) AS matched,
+        size(required_skills)  AS total_required,
+        size(matching_skills)  AS matched,
         matching_skills
 
     ORDER BY matched DESC, student.name
