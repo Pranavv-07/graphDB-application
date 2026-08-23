@@ -251,6 +251,8 @@ with st.sidebar:
     )
     st.divider()
     st.caption("SkillGraph · CognoDB · Neo4j Driver")
+    st.divider()
+    st.caption("Made by Pranav Vedula")
 
 # ---------------------------------------------------------
 # TABS
@@ -311,6 +313,7 @@ with tab1:
                                             <span class="badge badge-primary">{selected_skill}</span>
                                             <span class="badge" style="background:{prof_colour}; color:#fff; border-color:{prof_colour};">{prof}</span>
                                             {f'<span class="badge">{yrs_label}</span>' if yrs_label else ""}
+                                            
                                         </div>
                                     </div>
                                     """,
