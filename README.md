@@ -1,6 +1,6 @@
 <div align="center">
   
-# 🕸️ SkillGraph
+# SkillGraph
 
 **A High-Performance Graph Database Application** <br>
 *Built with Python, Streamlit, and CognoDB for the Wexa AI Engineering Challenge*
@@ -10,13 +10,13 @@
 [![Neo4j](https://img.shields.io/badge/Neo4j_Driver-4581C3?style=for-the-badge&logo=neo4j&logoColor=white)](https://neo4j.com)
 [![CognoDB](https://img.shields.io/badge/CognoDB-Graph_DB-000000?style=for-the-badge)](https://cognodb.com)
 
-[**Live Demo**](https://graphdb-application-pranavvedula.streamlit.app/) • [**Architecture**](#-application-architecture) • [**Cypher Queries**](#-the-power-of-cypher-queries)
+[**Live Demo**](https://graphdb-application-pranavvedula.streamlit.app/) • [**Architecture**](#application-architecture) • [**Cypher Queries**](#the-power-of-cypher-queries)
 
 </div>
 
 ---
 
-## 💡 The Challenge: Why a Graph Database?
+## The Challenge: Why a Graph Database?
 
 When building a recommendation engine that maps **Students ↔ Skills ↔ Projects ↔ Technologies ↔ Jobs**, traditional relational databases (SQL) hit a wall. 
 
@@ -26,7 +26,7 @@ In a relational database, answering a simple question like *"Which jobs match a 
 
 ---
 
-## 🏗️ Graph Data Model
+## Graph Data Model
 
 The backbone of this application is a highly optimized graph schema. Every node and relationship is designed to make career and skill recommendations instant.
 
@@ -48,7 +48,7 @@ graph TD
     class Student highlight
 ```
 
-| 🟢 Nodes | 🔗 Relationships (Edges) |
+| Nodes | Relationships (Edges) |
 |---|---|
 | `Student` (name, year, gpa) | `HAS_SKILL` (Includes *proficiency* and *years_experience* properties!) |
 | `Skill` (name, category) | `WORKED_ON` |
@@ -58,11 +58,11 @@ graph TD
 
 ---
 
-## ⚡ The Power of Cypher Queries
+## The Power of Cypher Queries
 
 I wrote parameterised Cypher queries to handle complex multi-hop graph traversals natively. This allows the backend to perform heavy lifting instantly.
 
-### 1️⃣ The "Matchmaker" (Multi-Hop Ranking Engine)
+### 1. The Matchmaker Engine (Multi-Hop Ranking)
 This query traverses **Job → Skill → Student** in a single sweep. It calculates the overlap between a job's requirements and a student's abilities, ranking candidates by their match score. *In SQL, this would require correlated subqueries across three join tables.*
 ```cypher
 MATCH (job:Job)-[:REQUIRES]->(required_skill:Skill)
@@ -81,7 +81,7 @@ RETURN student.name AS student, size(required_skills) AS total_required, size(ma
 ORDER BY matched DESC, student.name
 ```
 
-### 2️⃣ The 3-Hop Deep Dive
+### 2. The 3-Hop Deep Dive
 This query pulls a student's entire universe in one go: what they know, what projects they've built, the technologies used in those projects, and the jobs they qualify for. *SQL equivalent: 5 `JOIN` operations.*
 ```cypher
 MATCH (student:Student {name: $student_name})
@@ -104,16 +104,16 @@ RETURN student.name AS student, skills, projects, technologies, jobs
 
 ---
 
-## 🧩 Application Architecture
+## Application Architecture
 
 I architected the application with a strict separation of concerns, ensuring scalability and clean code.
 
 ```mermaid
 flowchart TD
-    UI["💻 app.py\n(Streamlit UI)"]
-    Queries["🧠 queries.py\n(Cypher Logic)"]
-    DB["🔌 database.py\n(Neo4j Driver)"]
-    CognoDB[("🕸️ CognoDB\n(Managed Graph DB)")]
+    UI["app.py\n(Streamlit UI)"]
+    Queries["queries.py\n(Cypher Logic)"]
+    DB["database.py\n(Neo4j Driver)"]
+    CognoDB[("CognoDB\n(Managed Graph DB)")]
 
     UI -->|Function Calls| Queries
     Queries -->|Session Exec| DB
@@ -128,20 +128,20 @@ flowchart TD
 **Key Engineering Decisions:**
 - **Idempotent Data Seeding:** The `seed.py` script uses `MERGE` clauses exclusively. You can run it 100 times, and it will never create duplicate nodes or crash. 
 - **Graceful Error Handling:** Wrapped the Neo4j driver in a safe `try/except` block and configured `atexit.register(driver.close)` to prevent connection leaks.
-- **Clean UI:** Removed unnecessary visual clutter. Styled with clean CSS and custom `Inter` typography for a highly professional look.
+- **Clean UI:** Styled with minimal CSS and custom `Inter` typography for a highly professional look without visual clutter.
 
 ---
 
-## 📸 See it in Action
+## UI Preview
 
 <div align="center">
 
-| 🔎 Student Explorer | 💼 Job Matchmaker Engine |
+| Student Explorer | Job Matchmaker Engine |
 |:---:|:---:|
 | <img src="screenShots/Screenshot%202026-08-24%20at%202.19.29%E2%80%AFPM.png" width="400"/> | <img src="screenShots/Screenshot%202026-08-24%20at%202.19.58%E2%80%AFPM.png" width="400"/> |
 | *Find experts with colour-coded proficiency badges.* | *Algorithmically rank candidates based on graph overlap.* |
 
-| 🕸️ 3-Hop Student Graph | 🛠️ Project Architecture |
+| 3-Hop Student Graph | Project Architecture |
 |:---:|:---:|
 | <img src="screenShots/Screenshot%202026-08-24%20at%202.20.20%E2%80%AFPM.png" width="400"/> | <img src="screenShots/Screenshot%202026-08-24%20at%202.19.37%E2%80%AFPM.png" width="400"/> |
 | *Traverse a student's entire connected network.* | *Break down real-world projects into core technologies.* |
@@ -150,7 +150,7 @@ flowchart TD
 
 ---
 
-## 🚀 Run It Locally
+## Run It Locally
 
 ### 1. Configure the Environment
 Clone the repository and set up your virtual environment:
